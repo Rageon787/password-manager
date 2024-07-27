@@ -1,6 +1,6 @@
 import tkinter as tk 
-from tkinter import ttk 
-
+# from tkinter import ttk 
+import ttkbootstrap as ttk 
 
 class App(tk.Tk):
     def __init__(self):
@@ -52,7 +52,7 @@ class App(tk.Tk):
         
         # Create button
         create_btn = ttk.Button(button_frame, text = "Create a new account")
-        create_btn.pack(side = 'top', fill = 'x')   
+        create_btn.pack(side = 'top', fill = 'x')    
 
 
 if __name__ == "__main__": 
