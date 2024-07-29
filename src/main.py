@@ -13,10 +13,12 @@ class App(tk.Tk):
         self.__create_widgets() 
 
     def sign_in(self):
-        pass 
+        print(self.username.get()) 
+        print(self.password.get())
 
     def create_account(self):
-        pass
+        print(self.username.get()) 
+        print(self.password.get()) 
 
     def __create_widgets(self): 
         self.title_frame = ttk.Frame(self) 
@@ -38,6 +40,7 @@ class App(tk.Tk):
 
         self.username_entry = ttk.Entry(self.username_frame, font = "Calibri 24", textvariable = self.username) 
         self.username_entry.pack(side = 'top', fill = 'x')  
+        self.username_entry.bind("<KeyRelease>", self.enable_button) 
 
         # password entry
         self.password_frame = ttk.Frame(self.up_frame)
@@ -48,24 +51,30 @@ class App(tk.Tk):
 
         self.password_entry = ttk.Entry(self.password_frame, font = "Calibri 24", textvariable = self.password)
         self.password_entry.pack(side = 'top', fill = 'x')   
-
+        self.password_entry.bind("<KeyRelease>", self.enable_button) 
 
         # Sign-in and create buttons 
         self.button_frame = ttk.Frame(self)
         self.button_frame.pack(side = 'top', fill = 'x')    
 
         # Sign-in button
-        self.signIn_btn = ttk.Button(self.button_frame, text = "Sign In", command = self.sign_in)
+        self.signIn_btn = ttk.Button(self.button_frame, text = "Sign In", state = tk.DISABLED, command = self.sign_in)
         self.signIn_btn.pack(side = 'top', fill = 'x') 
         
         
         # Create button
-        self.create_btn = ttk.Button(self.button_frame, text = "Create a new account", command = self.create_account)
+        self.create_btn = ttk.Button(self.button_frame, text = "Create a new account", state = tk.DISABLED, command = self.create_account)
         self.create_btn.pack(side = 'top', fill = 'x')    
 
-class User():
-    pass
+    def enable_button(self, event):
+        if self.username.get() and self.password.get():
+            self.signIn_btn['state'] = tk.NORMAL 
+            self.create_btn['state'] = tk.NORMAL 
+        else:
+            self.signIn_btn['state'] = tk.DISABLED
+            self.create_btn['state'] = tk.DISABLED 
 
+         
 if __name__ == "__main__": 
     app = App() 
     app.mainloop()
