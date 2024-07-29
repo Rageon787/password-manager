@@ -1,59 +1,70 @@
 import tkinter as tk 
 # from tkinter import ttk 
-import ttkbootstrap as ttk 
+import ttkbootstrap as ttk  
+import sqlite3 
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__() 
         self.title("Password Manager") 
-        self.geometry("500x500") 
+        self.geometry("500x500")  
+        self.username = tk.StringVar() 
+        self.password = tk.StringVar() 
         self.__create_widgets() 
 
-    def __create_widgets(self): 
-        title_frame = ttk.Frame(self) 
-        title_frame.pack(side = 'top', expand = True, fill = 'both')     
+    def sign_in(self):
+        pass 
 
-        title = ttk.Label(title_frame, text = "Bitwarden", font = "Calibri 32 bold" )  
-        title.pack(side = 'top', expand = True, fill = 'y')    
+    def create_account(self):
+        pass
+
+    def __create_widgets(self): 
+        self.title_frame = ttk.Frame(self) 
+        self.title_frame.pack(side = 'top', expand = True, fill = 'both')     
+
+        self.title = ttk.Label(self.title_frame, text = "Bitwarden", font = "Calibri 32 bold" )  
+        self.title.pack(side = 'top', expand = True, fill = 'y')    
 
         # Username and password entry frame
-        up_frame =  ttk.Frame(self)
-        up_frame.pack(side = 'top', fill = 'x', padx = 10, pady = 10)  
+        self.up_frame =  ttk.Frame(self)
+        self.up_frame.pack(side = 'top', fill = 'x', padx = 10, pady = 10)  
 
         # Username entry
-        username_frame = ttk.Frame(up_frame)
-        username_frame.pack(side = 'top', fill = 'x')
+        self.username_frame = ttk.Frame(self.up_frame)
+        self.username_frame.pack(side = 'top', fill = 'x')
 
-        username_label = ttk.Label(username_frame, text = "Username")
-        username_label.pack(side = 'top', fill = 'x') 
+        self.username_label = ttk.Label(self.username_frame, text = "Username")
+        self.username_label.pack(side = 'top', fill = 'x') 
 
-        username_entry = ttk.Entry(username_frame, font = "Calibri 24") 
-        username_entry.pack(side = 'top', fill = 'x')  
+        self.username_entry = ttk.Entry(self.username_frame, font = "Calibri 24", textvariable = self.username) 
+        self.username_entry.pack(side = 'top', fill = 'x')  
 
         # password entry
-        password_frame = ttk.Frame(up_frame)
-        password_frame.pack(side = 'top', fill = 'x') 
+        self.password_frame = ttk.Frame(self.up_frame)
+        self.password_frame.pack(side = 'top', fill = 'x') 
 
-        password_label = ttk.Label(password_frame, text = "Master Password")
-        password_label.pack(side = 'top', fill = 'x') 
+        self.password_label = ttk.Label(self.password_frame, text = "Master Password") 
+        self.password_label.pack(side = 'top', fill = 'x') 
 
-        password_entry = ttk.Entry(password_frame, font = "Calibri 24")
-        password_entry.pack(side = 'top', fill = 'x')   
+        self.password_entry = ttk.Entry(self.password_frame, font = "Calibri 24", textvariable = self.password)
+        self.password_entry.pack(side = 'top', fill = 'x')   
 
 
         # Sign-in and create buttons 
-        button_frame = ttk.Frame(self)
-        button_frame.pack(side = 'top', fill = 'x')    
+        self.button_frame = ttk.Frame(self)
+        self.button_frame.pack(side = 'top', fill = 'x')    
 
         # Sign-in button
-        signIn_btn = ttk.Button(button_frame, text = "Sign In")
-        signIn_btn.pack(side = 'top', fill = 'x') 
+        self.signIn_btn = ttk.Button(self.button_frame, text = "Sign In", command = self.sign_in)
+        self.signIn_btn.pack(side = 'top', fill = 'x') 
         
         
         # Create button
-        create_btn = ttk.Button(button_frame, text = "Create a new account")
-        create_btn.pack(side = 'top', fill = 'x')    
+        self.create_btn = ttk.Button(self.button_frame, text = "Create a new account", command = self.create_account)
+        self.create_btn.pack(side = 'top', fill = 'x')    
 
+class User():
+    pass
 
 if __name__ == "__main__": 
     app = App() 
