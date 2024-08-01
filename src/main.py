@@ -49,7 +49,7 @@ class App(tk.Tk):
         self.password_label = ttk.Label(self.password_frame, text = "Master Password") 
         self.password_label.pack(side = 'top', fill = 'x') 
 
-        self.password_entry = ttk.Entry(self.password_frame, font = "Calibri 24", textvariable = self.password)
+        self.password_entry = ttk.Entry(self.password_frame, font = "Calibri 24", textvariable = self.password, show = '*')
         self.password_entry.pack(side = 'top', fill = 'x')   
         self.password_entry.bind("<KeyRelease>", self.enable_button) 
 
