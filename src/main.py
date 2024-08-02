@@ -2,10 +2,24 @@ import tkinter as tk
 # from tkinter import ttk 
 import ttkbootstrap as ttk  
 import sqlite3 
+ 
+class Account: 
+    def __init__(self, username, password):
+        self.username = username 
+        self.password = password  
+        self.connnection = sqlite3.connect("accounts.db")  
+    
+    def new_account():
+        # Creates a new account in the database 
+        pass 
+    def fetch_acccount():
+        # Fetches an existing account from the database 
+        pass  
 
 class App(tk.Tk):
     def __init__(self):
-        super().__init__() 
+        super().__init__()  
+        self.style = ttk.Style("darkly")
         self.title("Password Manager") 
         self.geometry("500x500")  
         self.username = tk.StringVar() 
@@ -14,11 +28,15 @@ class App(tk.Tk):
 
     def sign_in(self):
         print(self.username.get()) 
-        print(self.password.get())
+        print(self.password.get())  
+
 
     def create_account(self):
         print(self.username.get()) 
-        print(self.password.get()) 
+        print(self.password.get())   
+        username = self.username.get() 
+        password = self.password.get() 
+        new_account = Account(username, password) 
 
     def __create_widgets(self): 
         self.title_frame = ttk.Frame(self) 
