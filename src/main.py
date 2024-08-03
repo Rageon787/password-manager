@@ -3,18 +3,32 @@ import tkinter as tk
 import ttkbootstrap as ttk  
 import sqlite3 
  
+class Users:
+    def __init__(self):
+        # Connects to an accounts database 
+        pass  
+    
+    def add_account(self,):
+        # Adds a new account to the database 
+        pass 
+    def find_account():
+        # Finds an existing account with specified username 
+        pass 
+     
+
 class Account: 
     def __init__(self, username, password):
         self.username = username 
-        self.password = password  
-        self.connnection = sqlite3.connect("accounts.db")  
+        self.password = password 
+
+    # User account methods 
+        # Add a login to the vault 
+        # Remove a login from the vault 
+
+
+
     
-    def new_account():
-        # Creates a new account in the database 
-        pass 
-    def fetch_acccount():
-        # Fetches an existing account from the database 
-        pass  
+
 
 class App(tk.Tk):
     def __init__(self):
@@ -26,17 +40,17 @@ class App(tk.Tk):
         self.password = tk.StringVar() 
         self.__create_widgets() 
 
-    def sign_in(self):
-        print(self.username.get()) 
-        print(self.password.get())  
+    def sign_in(self): 
+        username = self.username 
+        password = self.password
+        account = Account(username, password)  
 
 
     def create_account(self):
-        print(self.username.get()) 
-        print(self.password.get())   
         username = self.username.get() 
         password = self.password.get() 
         new_account = Account(username, password) 
+
 
     def __create_widgets(self): 
         self.title_frame = ttk.Frame(self) 
