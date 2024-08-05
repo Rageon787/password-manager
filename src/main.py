@@ -1,7 +1,8 @@
 import tkinter as tk 
 from tkinter import messagebox 
 import ttkbootstrap as ttk  
-import sqlite3  
+import sqlite3   
+import bcrypt
 
  
 class Users:
@@ -21,16 +22,27 @@ class Users:
             messagebox.showwarning("Username already taken, choose another username")  
 
     def get_account(self, username, password):
-        res = self.cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
-        if len(res.fetchall()) == 0:
-            print("account not found") 
+        res = self.cursor.execute("SELECT password FROM users WHERE username = ?", (username))  
+        hashed_password = res.fetchone()[0] 
+        if self.verify_password(password, hashed_password):
+            print ("It matches!") 
         else:
-            print("acccount found")  
+            print("It does not match")
+        
 
     def list_accounts(self):
         # Lists all accounts inside the database 
         res = self.cursor.execute("SELECT * FROM users")  
-        print(res.fetchall()) 
+        print(res.fetchall())  
+    
+    def hash_password(self, password): 
+        salt = bcrypt.gensalt() 
+        hashed_password = bcrypt.hashpw(password.encode(), salt)  
+        return hashed_password.decode() 
+    
+    def verify_password(self, password, hashed_password):
+        return bcrypt.checkpw(password.encode(), hashed_password.encode()) 
+    
      
 
 class Account: 
@@ -56,15 +68,16 @@ class App(tk.Tk):
 
     def sign_in(self): 
         username = self.username.get() 
-        password = self.password.get() 
+        password = self.password.get()   
         account = Account(username, password) 
-        self.users.get_account(username, password)   
+        res = self.users.get_account(username, password)   
 
     def create_account(self):
         username = self.username.get() 
-        password = self.password.get() 
+        password = self.password.get()  
+        hashed_password = self.users.hash_password(password) 
         new_account = Account(username, password)  
-        self.users.add_account(username, password)  
+        self.users.add_account(username, hashed_password)  
         self.users.list_accounts()
 
     def __create_widgets(self): 
@@ -125,4 +138,6 @@ class App(tk.Tk):
 if __name__ == "__main__": 
     app = App() 
     app.mainloop() 
-    app.users.connection.close() 
+    app.users.connection.close()  
+
+
