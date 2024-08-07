@@ -4,9 +4,8 @@ import ttkbootstrap as ttk
 import sqlite3   
 import bcrypt
 
- 
-class Users:
 
+class Users:
     def __init__(self):
         # Connects to an accounts database 
         self.connection = sqlite3.connect("temp_accounts.db") # Temporary database for testing  
@@ -19,7 +18,7 @@ class Users:
             self.cursor.execute("INSERT INTO users VALUES(?, ?)", (username, password)) 
             self.connection.commit()
         except:
-            messagebox.showwarning("Username already taken, choose another username")  
+            messagebox.showinfo(message = "Username already taken, choose another username")  
 
     def get_account(self, username, password):
         res = self.cursor.execute("SELECT password FROM users WHERE username = ?", (username))  
@@ -52,9 +51,23 @@ class Account:
 
     # User account methods 
         # Add a login to the vault 
-        # Remove a login from the vault  
+        # Remove a login from the vault 
         # get passwords of an account  
 
+class Gui(tk.Toplevel):
+    def __init__(self, parent): 
+        super().__init__(parent) 
+        self.parent = parent  
+        self.parent.withdraw()
+        self.title("Hello world")  
+        self.geometry("500x500") 
+        
+    def logout(self): 
+        self.destroy()
+        self.parent.deiconify() 
+
+    def create_widgets(self):
+        ttk.Button(self, text = "log out", command = self.logout).pack()  
 class App(tk.Tk):
     def __init__(self):
         super().__init__()  
@@ -65,12 +78,21 @@ class App(tk.Tk):
         self.password = tk.StringVar()  
         self.users = Users() 
         self.__create_widgets()  
+    
+    
+    def create_window(self):
+        # Creates a window for the GUI
+        # Refactor it into a class later  
+        pass
+                
 
     def sign_in(self): 
         username = self.username.get() 
         password = self.password.get()   
         account = Account(username, password) 
-        res = self.users.get_account(username, password)   
+        res = self.users.get_account(username, password) 
+        # self.create_window()  
+        gui = Gui(self)  
 
     def create_account(self):
         username = self.username.get() 
@@ -78,14 +100,14 @@ class App(tk.Tk):
         hashed_password = self.users.hash_password(password) 
         new_account = Account(username, password)  
         self.users.add_account(username, hashed_password)  
-        self.users.list_accounts()
+        self.users.list_accounts() 
 
     def __create_widgets(self): 
         self.title_frame = ttk.Frame(self) 
         self.title_frame.pack(side = 'top', expand = True, fill = 'both')     
 
-        self.title = ttk.Label(self.title_frame, text = "Bitwarden", font = "Calibri 32 bold" )  
-        self.title.pack(side = 'top', expand = True, fill = 'y')    
+        self.app_title = ttk.Label(self.title_frame, text = "Bitwarden", font = "Calibri 32 bold" )  
+        self.app_title.pack(side = 'top', expand = True, fill = 'y')    
 
         # Username and password entry frame
         self.up_frame =  ttk.Frame(self)
