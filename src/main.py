@@ -22,11 +22,14 @@ class Users:
 
     def get_account(self, username, password):
         res = self.cursor.execute("SELECT password FROM users WHERE username = ?", (username))  
-        hashed_password = res.fetchone()[0] 
-        if self.verify_password(password, hashed_password):
-            print ("It matches!") 
-        else:
-            print("It does not match")
+        try:
+            hashed_password = res.fetchone()[0]
+            if self.verify_password(password, hashed_password):
+                print ("It matches!") 
+            else:
+                print("It does not match")
+        except:
+            print("Username does not exist") 
         
 
     def list_accounts(self):
@@ -60,14 +63,27 @@ class Gui(tk.Toplevel):
         self.parent = parent  
         self.parent.withdraw()
         self.title("Hello world")  
-        self.geometry("500x500") 
-        
+        self.geometry("500x500")    
+        self.style = ttk.Style() 
+        self.__create__widgets()
+
+    def __create__widgets(self):  
+        self.sidebar_frame = ttk.Frame(self, bootstyle = "primary") 
+        self.sidebar_frame.pack(side = 'left')  
+        ttk.Label(self.sidebar_frame, text = "this is the sidebar frame").pack() 
+
+        self.vault_frame = ttk.Frame(self) 
+        self.vault_frame.pack(side = 'left')  
+        ttk.Label(self.vault_frame, text = "this is the vault frame").pack() 
+
+        self.config_frame = ttk.Frame(self) 
+        self.config_frame.pack(side = 'left') 
+        ttk.Label(self.config_frame, text = "this is the config frame").pack() 
+
     def logout(self): 
         self.destroy()
         self.parent.deiconify() 
 
-    def create_widgets(self):
-        ttk.Button(self, text = "log out", command = self.logout).pack()  
 class App(tk.Tk):
     def __init__(self):
         super().__init__()  
