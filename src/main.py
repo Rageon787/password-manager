@@ -66,9 +66,15 @@ class Gui(tk.Toplevel):
         self.title("Hello world")  
         self.geometry("500x500")    
         self.style = ttk.Style() 
-        self.__create__widgets()
+        self.__create__widgets() 
 
+
+    
     def __create__widgets(self):  
+        # Searchbar   
+        self.searchbar = ttk.Entry(self)     
+        self.searchbar.pack(side = 'top', padx = 5, pady = 5)   
+        self.searchbar.bind("")
         # Sidebar 
         self.sidebar_frame = tkm.SFrame(self)
         self.sidebar_frame.pack(side = 'left', expand = True, fill = 'both')  
