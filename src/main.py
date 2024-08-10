@@ -67,9 +67,17 @@ class Gui(tk.Toplevel):
         self.geometry("500x500")    
         self.style = ttk.Style() 
         self.__create__widgets() 
+        self.__events() 
 
-
+    def on_enter(self, event): 
+        print(self.focus_get())  
     
+    def on_mousepress(self, event):
+        pass
+         
+    def __events(self): 
+        self.bind("<Return>", self.on_enter)  
+        self.bind("<Button-1>", self.on_mousepress)       
     def __create__widgets(self):  
         # Searchbar   
         self.searchbar = ttk.Entry(self)     
