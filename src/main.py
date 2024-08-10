@@ -66,7 +66,8 @@ class Gui(tk.Toplevel):
         self.title("Hello world")  
         self.geometry("500x500")    
         self.style = ttk.Style() 
-        self.__create__widgets() 
+        self.__create_sidebar()
+        self.__create__widgets()  
         self.__events() 
 
     def on_enter(self, event): 
@@ -78,16 +79,29 @@ class Gui(tk.Toplevel):
     def __events(self): 
         self.bind("<Return>", self.on_enter)  
         self.bind("<Button-1>", self.on_mousepress)       
+    
+    def __create_sidebar(self): 
+        pass 
+         
     def __create__widgets(self):  
         # Searchbar   
         self.searchbar = ttk.Entry(self)     
         self.searchbar.pack(side = 'top', padx = 5, pady = 5)   
         self.searchbar.bind("")
         # Sidebar 
-        self.sidebar_frame = tkm.SFrame(self)
+        self.sidebar_frame = ttk.Frame(self)
         self.sidebar_frame.pack(side = 'left', expand = True, fill = 'both')  
-        ttk.Label(self.sidebar_frame, text = "this is the sidebar frame").pack() 
 
+        v = tk.StringVar(self.sidebar_frame, "allitems") 
+        values = {
+            "All items" : "allitems", 
+            "Favourites" : "favourites", 
+            "Bin" : "bin" 
+        } 
+
+        for (text, value) in values.items(): 
+            self.style.configure("TRadiobutton", indicatoron = False) 
+            ttk.Radiobutton(self.sidebar_frame, text = text, variable = v, value = value).pack(fill = 'x', ipady = 10, padx = 10)   
         # Main bar  
         self.vault_frame = tkm.SFrame(self) 
         self.vault_frame.pack(side = 'left', expand = True, fill = 'both')  
