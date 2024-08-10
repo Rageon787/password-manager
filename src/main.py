@@ -1,6 +1,7 @@
 import tkinter as tk 
-from tkinter import messagebox 
+from tkinter import messagebox  
 import ttkbootstrap as ttk  
+import tkmacosx as tkm 
 import sqlite3   
 import bcrypt
 
@@ -68,16 +69,19 @@ class Gui(tk.Toplevel):
         self.__create__widgets()
 
     def __create__widgets(self):  
-        self.sidebar_frame = ttk.Frame(self, bootstyle = "primary") 
-        self.sidebar_frame.pack(side = 'left')  
+        # Sidebar 
+        self.sidebar_frame = tkm.SFrame(self)
+        self.sidebar_frame.pack(side = 'left', expand = True, fill = 'both')  
         ttk.Label(self.sidebar_frame, text = "this is the sidebar frame").pack() 
 
-        self.vault_frame = ttk.Frame(self) 
-        self.vault_frame.pack(side = 'left')  
+        # Main bar  
+        self.vault_frame = tkm.SFrame(self) 
+        self.vault_frame.pack(side = 'left', expand = True, fill = 'both')  
         ttk.Label(self.vault_frame, text = "this is the vault frame").pack() 
 
-        self.config_frame = ttk.Frame(self) 
-        self.config_frame.pack(side = 'left') 
+        # Config bar  
+        self.config_frame = tkm.SFrame(self)
+        self.config_frame.pack(side = 'left', expand = True, fill = 'both') 
         ttk.Label(self.config_frame, text = "this is the config frame").pack() 
 
     def logout(self): 
