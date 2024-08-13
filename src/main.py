@@ -52,22 +52,29 @@ class Account:
     def __init__(self, username, password):
         self.username = username 
         self.password = password 
+        self.connection = sqlite3.connect(f"{self.username}.db")  
+        self.cursor = self.connection.cursor() 
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS vault(application TEXT, username TEXT, password TEXT)") 
+        
     
-    def get_passwords(self):
+    def get_logins(self):
         # returns a list of all logins from the vault    
-        pass
-    def add_login(self): 
-        pass  
+        res = self.cursor.execute("SELECT * FROM vault")  
+        print(res.fetchall()) 
+    def add_login(self, application, username, password): 
+        self.cursor.execute("INSERT INTO vault(application, username, password) VALUES(?, ?, ?)", (application, username, password))  
+
+
 
 class Gui(tk.Toplevel):
-    def __init__(self, parent): 
+    def __init__(self, parent, account): 
         super().__init__(parent) 
-        self.parent = parent  
+        self.parent = parent   
+        self.account = account
         self.parent.withdraw()
-        self.title("Password Manager")  
-        self.geometry("800x800")    
+        self.title("Password manager")  
+        self.geometry("1200x900")    
         self.style = ttk.Style() 
-        self.__create_sidebar()
         self.__create__widgets()  
         self.__events() 
 
@@ -81,14 +88,14 @@ class Gui(tk.Toplevel):
         self.bind("<Return>", self.on_enter)  
         self.bind("<Button-1>", self.on_mousepress)       
     
-    def __create_sidebar(self): 
-        pass 
-         
-    def __create__widgets(self):  
-        # Searchbar   
-        self.searchbar = ttk.Entry(self)     
-        self.searchbar.pack(side = 'top', padx = 5, pady = 5)   
-        self.searchbar.bind("")
+    def add_login(self): 
+        application = "dummy_application"
+        username = "dummy_username" 
+        email = "dummy_email"  
+        self.account.add_login(application, username, email)
+
+
+    def __create_vault_frame(self):
         # Main bar  
         self.vault_frame = tkm.SFrame(self) 
         self.vault_frame.pack(side = 'left', expand = True, fill = 'both')  
@@ -98,18 +105,31 @@ class Gui(tk.Toplevel):
 
         self.vault_tree = ttk.Treeview(self.vault_frame, columns = columns, show = 'headings') 
         
-        self.vault_tree.heading("application", text = "Name") 
+        self.vault_tree.heading("application", text = "Application") 
         self.vault_tree.heading("username", text = "Username")  
         self.vault_tree.heading("password", text = "Password")  
 
         self.vault_tree.pack(expand = True, fill = 'x')    
 
-        self.vaultAdd_btn = ttk.Button(self.vault_frame, text = "Add a login") 
+        self.vaultAdd_btn = ttk.Button(self.vault_frame, text = "Add a login", command = self.add_login)  
         self.vaultAdd_btn.pack(expand = True, fill = 'x') 
-        # Config bar  
+             
+
+    def __create_config_frame(self):
         self.config_frame = tkm.SFrame(self)
         self.config_frame.pack(side = 'left', expand = True, fill = 'both') 
         ttk.Label(self.config_frame, text = "this is the config frame").pack() 
+
+    def __create_searchbar(self):
+        # Searchbar   
+        self.searchbar = ttk.Entry(self)     
+        self.searchbar.pack(side = 'top', padx = 5, pady = 5)   
+        self.searchbar.bind("")
+
+    def __create__widgets(self):
+        self.__create_searchbar()
+        self.__create_vault_frame()
+        self.__create_config_frame()  
 
     def logout(self): 
         self.destroy()
@@ -120,7 +140,7 @@ class App(tk.Tk):
         super().__init__()  
         self.style = ttk.Style("darkly")
         self.title("Password Manager") 
-        self.geometry("800x800")  
+        self.geometry("1200x900")  
         self.username = tk.StringVar() 
         self.password = tk.StringVar()  
         self.users = Users() 
@@ -136,16 +156,16 @@ class App(tk.Tk):
     def sign_in(self): 
         username = self.username.get() 
         password = self.password.get()   
-        account = Account(username, password) 
+        self.account = Account(username, password) 
         res = self.users.get_account(username, password) 
         # self.create_window()  
-        gui = Gui(self)  
+        gui = Gui(self, self.account)   
 
     def create_account(self):
         username = self.username.get() 
         password = self.password.get()  
         hashed_password = self.users.hash_password(password) 
-        new_account = Account(username, password)  
+        self.account = Account(username, password)  
         self.users.add_account(username, hashed_password)  
         self.users.list_accounts() 
 
