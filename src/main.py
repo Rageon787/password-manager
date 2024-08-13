@@ -63,7 +63,7 @@ class Gui(tk.Toplevel):
         super().__init__(parent) 
         self.parent = parent  
         self.parent.withdraw()
-        self.title("Hello world")  
+        self.title("Password Manager")  
         self.geometry("500x500")    
         self.style = ttk.Style() 
         self.__create_sidebar()
@@ -88,24 +88,16 @@ class Gui(tk.Toplevel):
         self.searchbar = ttk.Entry(self)     
         self.searchbar.pack(side = 'top', padx = 5, pady = 5)   
         self.searchbar.bind("")
-        # Sidebar 
-        self.sidebar_frame = ttk.Frame(self)
-        self.sidebar_frame.pack(side = 'left', expand = True, fill = 'both')  
-
-        v = tk.StringVar(self.sidebar_frame, "allitems") 
-        values = {
-            "All items" : "allitems", 
-            "Favourites" : "favourites", 
-            "Bin" : "bin" 
-        } 
-
-        for (text, value) in values.items(): 
-            self.style.configure("TRadiobutton", indicatoron = False) 
-            ttk.Radiobutton(self.sidebar_frame, text = text, variable = v, value = value).pack(fill = 'x', ipady = 10, padx = 10)   
         # Main bar  
         self.vault_frame = tkm.SFrame(self) 
         self.vault_frame.pack(side = 'left', expand = True, fill = 'both')  
         ttk.Label(self.vault_frame, text = "this is the vault frame").pack() 
+        
+        items = ["kjfkjedkj", "kd", "hngk"]
+        vault_tree = ttk.Treeview(vault_frame) 
+        vault_tree['columns'] = ("type", "value") 
+        for item in items:
+
 
         # Config bar  
         self.config_frame = tkm.SFrame(self)
