@@ -52,11 +52,12 @@ class Account:
     def __init__(self, username, password):
         self.username = username 
         self.password = password 
-
-    # User account methods 
-        # Add a login to the vault 
-        # Remove a login from the vault 
-        # get passwords of an account  
+    
+    def get_passwords(self):
+        # returns a list of all logins from the vault    
+        pass
+    def add_login(self): 
+        pass  
 
 class Gui(tk.Toplevel):
     def __init__(self, parent): 
@@ -64,7 +65,7 @@ class Gui(tk.Toplevel):
         self.parent = parent  
         self.parent.withdraw()
         self.title("Password Manager")  
-        self.geometry("500x500")    
+        self.geometry("800x800")    
         self.style = ttk.Style() 
         self.__create_sidebar()
         self.__create__widgets()  
@@ -93,12 +94,18 @@ class Gui(tk.Toplevel):
         self.vault_frame.pack(side = 'left', expand = True, fill = 'both')  
         ttk.Label(self.vault_frame, text = "this is the vault frame").pack() 
         
-        items = ["kjfkjedkj", "kd", "hngk"]
-        vault_tree = ttk.Treeview(vault_frame) 
-        vault_tree['columns'] = ("type", "value") 
-        for item in items:
+        columns = ("application", "username", "password") 
 
+        self.vault_tree = ttk.Treeview(self.vault_frame, columns = columns, show = 'headings') 
+        
+        self.vault_tree.heading("application", text = "Name") 
+        self.vault_tree.heading("username", text = "Username")  
+        self.vault_tree.heading("password", text = "Password")  
 
+        self.vault_tree.pack(expand = True, fill = 'x')    
+
+        self.vaultAdd_btn = ttk.Button(self.vault_frame, text = "Add a login") 
+        self.vaultAdd_btn.pack(expand = True, fill = 'x') 
         # Config bar  
         self.config_frame = tkm.SFrame(self)
         self.config_frame.pack(side = 'left', expand = True, fill = 'both') 
@@ -113,7 +120,7 @@ class App(tk.Tk):
         super().__init__()  
         self.style = ttk.Style("darkly")
         self.title("Password Manager") 
-        self.geometry("500x500")  
+        self.geometry("800x800")  
         self.username = tk.StringVar() 
         self.password = tk.StringVar()  
         self.users = Users() 
@@ -146,7 +153,7 @@ class App(tk.Tk):
         self.title_frame = ttk.Frame(self) 
         self.title_frame.pack(side = 'top', expand = True, fill = 'both')     
 
-        self.app_title = ttk.Label(self.title_frame, text = "Bitwarden", font = "Calibri 32 bold" )  
+        self.app_title = ttk.Label(self.title_frame, text = "Password manager", font = "Calibri 32 bold" )  
         self.app_title.pack(side = 'top', expand = True, fill = 'y')    
 
         # Username and password entry frame
