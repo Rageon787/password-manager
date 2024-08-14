@@ -4,6 +4,7 @@ import ttkbootstrap as ttk
 import tkmacosx as tkm 
 import sqlite3   
 import bcrypt
+import random 
 
 
 class Users:
@@ -60,11 +61,12 @@ class Account:
     def get_logins(self):
         # returns a list of all logins from the vault    
         res = self.cursor.execute("SELECT * FROM vault")  
-        print(res.fetchall()) 
+        return res.fetchall()   
+
     def add_login(self, application, username, password): 
         self.cursor.execute("INSERT INTO vault(application, username, password) VALUES(?, ?, ?)", (application, username, password))  
-
-
+        self.connection.commit() 
+        self.get_logins() 
 
 class Gui(tk.Toplevel):
     def __init__(self, parent, account): 
@@ -74,7 +76,7 @@ class Gui(tk.Toplevel):
         self.parent.withdraw()
         self.title("Password manager")  
         self.geometry("1200x900")    
-        self.style = ttk.Style() 
+        self.style = ttk.Style()  
         self.__create__widgets()  
         self.__events() 
 
@@ -88,12 +90,14 @@ class Gui(tk.Toplevel):
         self.bind("<Return>", self.on_enter)  
         self.bind("<Button-1>", self.on_mousepress)       
     
-    def add_login(self): 
-        application = "dummy_application"
-        username = "dummy_username" 
-        email = "dummy_email"  
-        self.account.add_login(application, username, email)
-
+    def add_login(self):  
+        letters = ("abcdefghijklmnopqrstuvwxyx") 
+        application = "".join(random.choice(letters) for i in range(5))
+        username = "".join(random.choice(letters) for i in range(8)) 
+        password = "".join(random.choice(letters) for i in range(10))    
+        self.vault_tree.insert("", tk.END, values = (application, username, password))
+        self.account.add_login(application, username, password) 
+        
 
     def __create_vault_frame(self):
         # Main bar  
@@ -109,11 +113,18 @@ class Gui(tk.Toplevel):
         self.vault_tree.heading("username", text = "Username")  
         self.vault_tree.heading("password", text = "Password")  
 
-        self.vault_tree.pack(expand = True, fill = 'x')    
+        logins = self.account.get_logins() 
 
+        self.vault_tree.pack(expand = True, fill = 'x') 
+        
+        for login in logins:
+            self.vault_tree.insert('', tk.END, values=login) 
+
+            
+    def __create_add_button(self):
         self.vaultAdd_btn = ttk.Button(self.vault_frame, text = "Add a login", command = self.add_login)  
         self.vaultAdd_btn.pack(expand = True, fill = 'x') 
-             
+         
 
     def __create_config_frame(self):
         self.config_frame = tkm.SFrame(self)
@@ -121,14 +132,14 @@ class Gui(tk.Toplevel):
         ttk.Label(self.config_frame, text = "this is the config frame").pack() 
 
     def __create_searchbar(self):
-        # Searchbar   
         self.searchbar = ttk.Entry(self)     
         self.searchbar.pack(side = 'top', padx = 5, pady = 5)   
         self.searchbar.bind("")
 
-    def __create__widgets(self):
+    def __create__widgets(self): 
         self.__create_searchbar()
         self.__create_vault_frame()
+        self.__create_add_button() 
         self.__create_config_frame()  
 
     def logout(self): 
