@@ -118,6 +118,14 @@ class Config:
         password_entry = ttk.Entry(self.config_frame, textvariable = password_var) 
         password_entry.pack() 
 
+        save_btn = ttk.Button(self.config_frame, text = "save")  
+        save_btn.pack() 
+        
+        cancel_btn = ttk.Button(self.config_frame, text = "cancel")  
+        cancel_btn.pack() 
+
+
+
 
     def _create_newLoginPane(self): 
         
@@ -147,7 +155,13 @@ class Config:
 
         password_var = tk.StringVar()
         password_entry = ttk.Entry(self.config_frame, textvariable = password_var) 
-        password_entry.pack() 
+        password_entry.pack()  
+
+        save_btn = ttk.Button(self.config_frame, text = "save")  
+        save_btn.pack() 
+        
+        cancel_btn = ttk.Button(self.config_frame, text = "cancel")  
+        cancel_btn.pack() 
 
 class Account: 
     def __init__(self, username, password):
