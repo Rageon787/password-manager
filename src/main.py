@@ -76,11 +76,34 @@ class Config:
 
     def _create_newLoginPane(self): 
         
-        # Triggered when a user selects the add a login button 
+        # Triggered when a user selects the "add a login" button 
 
-        self._empty_configFrame()
-        ttk.Label(self.config_frame, text = "ADD ITEM").pack()  
-           
+        self._empty_configFrame()  
+
+        operation_label = ttk.Label(self.config_frame, text = "ADD ITEM") 
+        operation_label.pack()  
+
+        nameEntry_label = ttk.Label(self.config_frame, text = "Name") 
+        nameEntry_label.pack()
+
+        name_var = tk.StringVar()
+        name_entry = ttk.Entry(self.config_frame, textvariable = name_var) 
+        name_entry.pack()  
+
+        usernameEntry_label = ttk.Label(self.config_frame, text = "Username")  
+        usernameEntry_label.pack() 
+
+        username_var = tk.StringVar()
+        username_entry = ttk.Entry(self.config_frame, textvariable = username_var) 
+        username_entry.pack()
+        
+        passwordEntry_label = ttk.Label(self.config_frame, text = "Password")  
+        passwordEntry_label.pack()  
+
+        password_var = tk.StringVar()
+        password_entry = ttk.Entry(self.config_frame, textvariable = password_var) 
+        password_entry.pack() 
+
 class Account: 
     def __init__(self, username, password):
         self.username = username 
