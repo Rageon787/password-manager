@@ -67,6 +67,29 @@ class Config:
         self._empty_configFrame()
         ttk.Label(self.config_frame, text = "ITEM INFORMATION").pack()  
 
+        nameEntry_label = ttk.Label(self.config_frame, text = "Name") 
+        nameEntry_label.pack()
+
+        name_var = tk.StringVar()
+        name_entry = ttk.Entry(self.config_frame, textvariable = name_var) 
+        name_entry.pack()  
+
+        usernameEntry_label = ttk.Label(self.config_frame, text = "Username")  
+        usernameEntry_label.pack() 
+
+        username_var = tk.StringVar()
+        username_entry = ttk.Entry(self.config_frame, textvariable = username_var) 
+        username_entry.pack()
+        
+        passwordEntry_label = ttk.Label(self.config_frame, text = "Password")  
+        passwordEntry_label.pack()  
+
+        password_var = tk.StringVar()
+        password_entry = ttk.Entry(self.config_frame, textvariable = password_var) 
+        password_entry.pack() 
+
+
+
     def _create_editPane(self): 
 
         # Triggers when a user wants to edit an item 
